@@ -1,35 +1,50 @@
-import { Button } from "antd"
-import React from "react"
+import React, { useState } from "react"
+import { Input } from "antd"
+import AuthLayout from "../../components/layout/Auth"
 
 import { auth, authService } from "../../utils/firebase"
 
-const registerPayload = {
-  username: "diana",
-  email: "diana.test@yahoo.com",
-  password: "12345678",
-}
-
-const handleRegister = () => {
-  auth
-    .createUserWithEmailAndPassword(
-      authService,
-      registerPayload.email,
-      registerPayload.password
-    )
-    .then(async () => {
-      auth.updateProfile(authService.currentUser, {
-        displayName: registerPayload,
-      })
-    })
-    .catch((err) => console.log(err.message))
-}
-
 function Register() {
+  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [signupError, setSignupError] = useState("")
+
+  const handleRegister = () => {
+    auth
+      .createUserWithEmailAndPassword(authService, email, password)
+      .then(async () => {
+        auth.updateProfile(authService.currentUser, {
+          displayName: username,
+        })
+      })
+      .catch((err) => setSignupError(err.message))
+  }
+
   return (
-    <div>
-      Register pls!
-      <Button onClick={handleRegister}>Register</Button>
-    </div>
+    <AuthLayout
+      errorMessage={signupError}
+      handleSubmit={handleRegister}
+      submitText="Register"
+      redirectLink="/auth/login"
+      redirectLinkText="Login"
+    >
+      <Input
+        label="email"
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Input
+        label="Username"
+        placeholder="Username"
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <Input
+        label="Password"
+        placeholder="Password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+    </AuthLayout>
   )
 }
 
