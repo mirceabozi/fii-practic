@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React from "react"
+import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 const Layout = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ const NavBar = styled.ul`
   height: 80px;
   align-items: center;
 
-  li{
+  li {
     list-style-type: none;
     margin: 0 5px;
   }
@@ -21,20 +22,20 @@ const NavBar = styled.ul`
 
 function Home() {
   return (
-  <Layout>
-    <NavBar>
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/login">Login</Link>
-      </li>
-      <li>
-        <Link to="/register">Register</Link>
-      </li>
-    </NavBar>
-
-  </Layout>)
+    <Layout>
+      <NavBar>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+        <li>
+          <Link to="/register">Register</Link>
+        </li>
+      </NavBar>
+    </Layout>
+  )
 }
 
-export default Home;
+export default Home
