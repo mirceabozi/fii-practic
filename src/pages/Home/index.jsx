@@ -28,10 +28,10 @@ function Home() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/login">Login</Link>
+          <Link to="/auth/login">Login</Link>
         </li>
         <li>
-          <Link to="/register">Register</Link>
+          <Link to="/auth/register">Register</Link>
         </li>
       </NavBar>
     </Layout>

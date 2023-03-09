@@ -1,37 +1,36 @@
 import React, { useState } from "react"
 import { Input } from "antd"
 import AuthLayout from "../../components/layout/Auth"
+import { auth, authService } from "../../utils/firebase"
 
 function Login() {
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [signupError, setSignupError] = useState("")
 
   //M-am inspirat de la Mihail de pe proiect ca sa imi vina mai usor
-
-  //  const handleLogin = () => {
-  //    auth
-  //      .signInWithEmailAndPassword(email, password)
-  //      .then((user) => history.push("/"))
-  //      .catch((error) => setSignupError(error.message))
-  //  }
-
-  function handleLogin() {
-    console.log("I AM LOGGED IN BABY!!")
+  const handleLogin = () => {
+    auth
+      .signInWithEmailAndPassword(authService, email, password)
+      .then(() => {
+        localStorage.setItem("isLoggedIn", "true")
+      })
+      .catch((err) => setSignupError(err.message))
   }
+
   return (
     <AuthLayout
       errorMessage={signupError}
       handleSubmit={handleLogin}
       submitText="Login"
-      redirectLink="/register"
+      redirectLink="/auth/register"
       redirectLinkText="Register"
     >
       <Input
-        autoComplete="username"
-        label="Username"
-        placeholder="Username"
-        onChange={(e) => setUsername(e.target.value)}
+        autoComplete="email"
+        label="Email"
+        placeholder="Email"
+        onChange={(e) => setEmail(e.target.value)}
       />
       <Input
         autoComplete="password"
