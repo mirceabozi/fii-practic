@@ -3,25 +3,22 @@ import Home from "../pages/Home"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
 import { createBrowserRouter } from "react-router-dom"
-import { Outlet } from "react-router-dom"
-
-function TestRoute() {
-  return (
-    <div>
-      Layout begin
-      <Outlet />
-    </div>
-  )
-}
+import PrivateRoute from "../components/common/PrivateRoute"
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <PrivateRoute />,
+    children: [
+      {
+        path: "/",
+        index: true,
+        element: <Home />,
+      },
+    ],
   },
   {
     path: "/auth",
-    element: <TestRoute />,
     children: [
       {
         path: "login",

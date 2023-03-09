@@ -30,7 +30,7 @@ function Register() {
       redirectLinkText="Login"
     >
       <Input
-        label="email"
+        label="Email"
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
       />
