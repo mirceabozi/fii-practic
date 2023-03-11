@@ -1,14 +1,26 @@
 import React from "react"
 import { Navigate, Outlet } from "react-router-dom"
+import NavBar from "../layout/NavBar"
 
 import isLoggedIn from "../../utils/auth"
+import styled from "styled-components"
+const Background = styled.div`
+  > div:nth-child(2) {
+    margin-top: 60px;
+    padding-top: 60px;
+  }
+
+  > div {
+    background: linear-gradient(to left, #34e89e, #0f3443);
+  }
+`
 
 const PrivateRoute = () => {
   return isLoggedIn() ? (
-    <div>
-      {/* TODO: Insert Page Layout */}
+    <Background>
+      <NavBar />
       <Outlet />
-    </div>
+    </Background>
   ) : (
     <Navigate to="/auth/login" />
   )

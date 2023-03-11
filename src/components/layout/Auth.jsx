@@ -12,6 +12,7 @@ const Container = styled.div`
   padding: 24px;
   width: 300px;
   border-radius: 10px;
+  background: #fffffff7;
 
   > * {
     margin-bottom: 10px;
@@ -19,12 +20,13 @@ const Container = styled.div`
 `
 
 const FormWrap = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background: linear-gradient(to left, #34e89e, #0f3443);
 `
 
 const Error = styled.span`

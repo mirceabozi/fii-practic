@@ -1,41 +1,34 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import Card from "../../components/cards/Meme"
 
-const Layout = styled.div`
+const HomeWrap = styled.div`
+  min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-`
-const NavBar = styled.ul`
-  display: flex;
-  margin: 0;
-  padding: 0;
-  height: 80px;
+  flex-direction: column;
   align-items: center;
-
-  li {
-    list-style-type: none;
-    margin: 0 5px;
-  }
 `
+
+function renderMemes(meme) {
+  return <Card key={meme.id} img={meme.url} name={meme.name} />
+}
 
 function Home() {
-  return (
-    <Layout>
-      <NavBar>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/auth/login">Login</Link>
-        </li>
-        <li>
-          <Link to="/auth/register">Register</Link>
-        </li>
-      </NavBar>
-    </Layout>
-  )
+  const [memes, setMemes] = useState([])
+
+  useEffect(() => {
+    async function getMemes() {
+      const response = await fetch("https://api.imgflip.com/get_memes")
+      const result = await response.json()
+
+      setMemes(result?.data?.memes)
+    }
+
+    getMemes()
+  }, [])
+
+  return <HomeWrap>{memes.length && memes.map(renderMemes)}</HomeWrap>
 }
 
 export default Home
