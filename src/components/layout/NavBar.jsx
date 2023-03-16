@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faHouse,
+  faMagnifyingGlass,
   faRightToBracket,
   faUser,
   faUserPen,
@@ -50,6 +51,10 @@ export default function NavBar() {
         <li>
           <FontAwesomeIcon icon={faHouse} />
           <Link to="/">Home</Link>
+        </li>
+        <li>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+          <Link to="/find">Find</Link>
         </li>
         <li>
           <FontAwesomeIcon icon={faUser} />
