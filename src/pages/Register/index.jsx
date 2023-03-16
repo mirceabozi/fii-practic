@@ -42,6 +42,7 @@ function Register() {
       <Input
         label="Password"
         placeholder="Password"
+        type="password"
         onChange={(e) => setPassword(e.target.value)}
       />
     </AuthLayout>

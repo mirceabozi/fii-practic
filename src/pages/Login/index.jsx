@@ -8,7 +8,6 @@ function Login() {
   const [password, setPassword] = useState("")
   const [signupError, setSignupError] = useState("")
 
-  //M-am inspirat de la Mihail de pe proiect ca sa imi vina mai usor
   const handleLogin = () => {
     auth
       .signInWithEmailAndPassword(authService, email, password)
@@ -36,6 +35,7 @@ function Login() {
         autoComplete="password"
         label="Password"
         placeholder="Password"
+        type="password"
         onChange={(e) => setPassword(e.target.value)}
       />
     </AuthLayout>
