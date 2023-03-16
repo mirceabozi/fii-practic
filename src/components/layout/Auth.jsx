@@ -31,6 +31,7 @@ const FormWrap = styled.div`
 
 const Error = styled.span`
   color: red;
+  word-break: break-word;
 `
 const ButtonWrap = styled.div`
   button:first-child {
