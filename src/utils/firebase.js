@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth"
 
 const firebaseConfig = {
@@ -27,6 +28,7 @@ const auth = {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 }
 
 export { auth, dbService, authService }

@@ -3,12 +3,14 @@ import { Input } from "antd"
 import AuthLayout from "../../components/layout/Auth"
 
 import { auth, authService } from "../../utils/firebase"
+import { useNavigate } from "react-router-dom"
 
 function Register() {
   const [email, setEmail] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [signupError, setSignupError] = useState("")
+  const navigate = useNavigate()
 
   const handleRegister = () => {
     auth
@@ -17,6 +19,7 @@ function Register() {
         auth.updateProfile(authService.currentUser, {
           displayName: username,
         })
+        navigate("/auth/login")
       })
       .catch((err) => setSignupError(err.message))
   }
