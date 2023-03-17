@@ -4,15 +4,12 @@ import NavBar from "../layout/NavBar"
 
 import isLoggedIn from "../../utils/auth"
 import styled from "styled-components"
+
 const Background = styled.div`
   > div:nth-child(2) {
     margin-top: 60px;
     padding-top: 60px;
     min-height: 100vh;
-  }
-
-  > div {
-    background: linear-gradient(to left, #34e89e, #0f3443);
   }
 `
 

@@ -2,17 +2,20 @@ import React, { useState } from "react"
 import { Input } from "antd"
 import AuthLayout from "../../components/layout/Auth"
 import { auth, authService } from "../../utils/firebase"
+import { useNavigate } from "react-router-dom"
 
 function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [signupError, setSignupError] = useState("")
+  const navigate = useNavigate()
 
   const handleLogin = () => {
     auth
       .signInWithEmailAndPassword(authService, email, password)
       .then(() => {
         localStorage.setItem("isLoggedIn", "true")
+        navigate("/")
       })
       .catch((err) => setSignupError(err.message))
   }
