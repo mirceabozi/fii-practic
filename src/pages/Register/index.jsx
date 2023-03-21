@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Input } from "antd"
 import AuthLayout from "../../components/layout/Auth"
 
-import { auth, authService } from "../../utils/firebase"
+import { auth, db } from "../../utils/firebase"
 import { useNavigate } from "react-router-dom"
 
 function Register() {
@@ -14,10 +14,17 @@ function Register() {
 
   const handleRegister = () => {
     auth
-      .createUserWithEmailAndPassword(authService, email, password)
-      .then(async () => {
-        auth.updateProfile(authService.currentUser, {
+      .createUserWithEmailAndPassword(email, password)
+      .then(async (authUser) => {
+        await authUser.user.updateProfile({
           displayName: username,
+        })
+        await db.collection("users").add({
+          userId: authUser.user.uid,
+          username: username,
+          description: "",
+          avatarUrl: "",
+          matching: [],
         })
         navigate("/auth/login")
       })
