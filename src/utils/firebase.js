@@ -1,24 +1,7 @@
-import { initializeApp } from "firebase/app"
-import { getFirestore } from "@firebase/firestore"
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
-} from "firebase/auth"
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  getDoc,
-  onSnapshot,
-  doc,
-  updateDoc,
-} from "firebase/firestore"
-import { getStorage, ref, uploadBytes } from "firebase/storage"
+import firebase from "firebase/compat/app"
+import "firebase/compat/firestore"
+import "firebase/compat/auth"
+import "firebase/compat/storage"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDLeYV0RtXJpUH5w4C4ukdJEQJbDiIWRk4",
@@ -29,36 +12,11 @@ const firebaseConfig = {
   appId: "1:429868905828:web:ffb3447a7ecbc69b9b7671",
 }
 
-const app = initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig)
 
-const authService = getAuth()
-const dbService = getFirestore(app)
-const storageService = getStorage(app)
+const auth = firebase.auth()
+const db = firebase.firestore()
+const storage = firebase.storage()
 
-const auth = {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
-}
-
-const database = {
-  collection,
-  query,
-  where,
-  getDocs,
-  getDoc,
-  onSnapshot,
-  doc,
-  updateDoc,
-}
-
-const storage = {
-  getStorage,
-  ref,
-  uploadBytes,
-}
-
-export { auth, dbService, authService, storageService, database, storage }
-export default app
+export { auth, db, storage }
+export default firebase

@@ -10,7 +10,7 @@ import {
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons"
 import { Button } from "antd"
-import { authService, auth } from "../../utils/firebase"
+import { auth } from "../../utils/firebase"
 
 const Layout = styled.div`
   display: flex;
@@ -69,7 +69,7 @@ export default function NavBar() {
 
   const signOut = () => {
     localStorage.clear("isLoggedIn")
-    auth.signOut(authService)
+    auth.signOut()
     navigate("/auth/login")
   }
 
