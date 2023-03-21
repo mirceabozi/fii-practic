@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
-import { useNavigate, useParams } from "react-router-dom"
-import { database, dbService } from "../../utils/firebase"
-import { Button } from "antd"
+
 import UploadAvatar from "./components/UploadAvatar"
 import UpdateDescriptionModal from "./components/UpdateDescriptionModal"
+import UploadMemeModal from "./components/UploadMemeModal"
+
+import { auth, db } from "../../utils/firebase"
 
 const Wrap = styled.div`
   display: flex;
@@ -17,37 +18,43 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  hr {
-    width: 92%;
-  }
 `
 
-const Image = styled.div`
+const UserDetails = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid lightgrey;
+  padding: 20px;
+`
+
+const Image = styled.img`
   height: 180px;
   width: 180px;
   border-radius: 50%;
-  background: url(${(props) => props.img});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-color: white;
-  margin-bottom: 20px;
 `
 
 const Card = styled.div`
-  background: url(${(props) => props.img}) center center / contain no-repeat
-    white;
   height: 350px;
   width: 250px;
-  margin: 15px;
   border-radius: 10px;
+  margin-right: 20px;
+
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+
+  :nth-child(3n + 3) {
+    margin-right: 0;
+  }
 `
 
-const CardWrapper = styled.div`
+const CardsWrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
-  padding: 0px 20px;
+  padding: 20px;
 `
 
 const Name = styled.div`
@@ -71,65 +78,69 @@ export default function Profile() {
   const [userDetails, setUserDetails] = useState({})
   const [profileMemes, setProfileMemes] = useState([])
 
+  // get user profile details
   useEffect(() => {
-    const getUserById = async () => {
-      const getUserByIdQuery = database.query(
-        database.collection(dbService, "users"),
-        database.where("userId", "==", "XnkYDIA7yzPdOsihqbxXk8qqDoV2")
+    db.collection("users").onSnapshot((snapshot) => {
+      const userDetails = snapshot.docs.find(
+        (doc) => doc.data().userId === auth?.currentUser?.uid
       )
-
-      database.onSnapshot(getUserByIdQuery, (querySnapshot) => {
-        const { avatarUrl, description, username, memes } =
-          querySnapshot.docs?.[0]?.data()
-        setUserDetails({
-          avatarUrl,
-          description,
-          username,
-        })
-        setProfileMemes(memes)
+      setUserDetails({
+        documentId: userDetails.id,
+        description: userDetails.data().description,
+        avatarUrl: userDetails.data().avatarUrl,
+        username: userDetails.data().username,
       })
-    }
-
-    getUserById()
+    })
   }, [])
 
-  // useEffect(() => {
-  //   async function getMemes() {
-  //     const response = await fetch("https://api.imgflip.com/get_memes")
-  //     const result = await response.json()
-
-  //     setProfileMemes(result?.data?.memes)
-  //   }
-
-  //   getMemes()
-  // }, [])
+  // get user memes
+  useEffect(() => {
+    db.collection("memes")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        const filteredMemes = snapshot.docs.filter(
+          (doc) => doc.data().userId === auth.currentUser?.uid
+        )
+        return setProfileMemes(
+          filteredMemes.map((meme) => ({
+            id: meme.id,
+            ...meme.data(),
+          }))
+        )
+      })
+  }, [])
 
   function renderMemes(meme) {
-    return <Card key={meme.id} img={meme.url} />
+    return (
+      <Card key={meme.id}>
+        <img src={meme.imageUrl} alt={meme.imageUrl} />
+      </Card>
+    )
   }
 
   return (
     <Wrap>
       <Content>
-        <Image img={userDetails?.avatarUrl} />
-        <Name>{userDetails?.username}</Name>
-        <Description>{userDetails?.description || "-"}</Description>
-        <ActionsWrap>
-          {/* <UploadAvatar /> */}
-          {/* <Button>Edit Info</Button> */}
-          {/* <Button>Upload Post</Button> */}
-          <UpdateDescriptionModal
-            currentDescription={userDetails?.description}
-          />
-        </ActionsWrap>
-        <hr />
-        <CardWrapper>
+        <UserDetails>
+          <Image src={userDetails?.avatarUrl} alt={userDetails?.username} />
+          <Name>{userDetails?.username}</Name>
+          <Description>{userDetails?.description || "-"}</Description>
+          <ActionsWrap>
+            <UploadAvatar />
+            <UploadMemeModal />
+            <UpdateDescriptionModal
+              currentDescription={userDetails?.description}
+              documentId={userDetails?.documentId}
+            />
+          </ActionsWrap>
+        </UserDetails>
+        <CardsWrapper>
           {profileMemes.length === 0 ? (
             <span>You have no memes added yet </span>
           ) : (
             profileMemes.map(renderMemes)
           )}
-        </CardWrapper>
+        </CardsWrapper>
       </Content>
     </Wrap>
   )

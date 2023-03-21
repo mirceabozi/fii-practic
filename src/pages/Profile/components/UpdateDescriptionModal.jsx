@@ -1,9 +1,12 @@
 import React, { useEffect } from "react"
 import { Button, Input, Modal } from "antd"
 import { useState } from "react"
-import { database, dbService } from "../../../utils/firebase"
+import { db } from "../../../utils/firebase"
 
-export default function UpdateDescriptionModal({ currentDescription }) {
+export default function UpdateDescriptionModal({
+  documentId,
+  currentDescription,
+}) {
   const [open, setOpen] = useState(false)
   const [description, setDescription] = useState(currentDescription)
 
@@ -17,20 +20,12 @@ export default function UpdateDescriptionModal({ currentDescription }) {
 
   const handleOk = () => {
     const changeDescription = async () => {
-      const getUserByIdQuery = database.query(
-        database.collection(dbService, "users"),
-        database.where("userId", "==", "XnkYDIA7yzPdOsihqbxXk8qqDoV2")
-      )
-      const users = await database.getDocs(getUserByIdQuery)
-      const userId = users.docs?.[0].id
-
-      await database.updateDoc(database.doc(dbService, "users", userId), {
+      db.collection("users").doc(documentId).update({
         description: description,
       })
       setDescription("")
       setOpen(false)
     }
-
     changeDescription()
   }
   const handleCancel = () => {

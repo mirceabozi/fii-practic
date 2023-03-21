@@ -1,14 +1,15 @@
 import React, { useState } from "react"
 import { InboxOutlined } from "@ant-design/icons"
-import { Button, message, Upload, Modal } from "antd"
+import { Button, message, Upload, Modal, Input } from "antd"
 import { v4 as uuid } from "uuid"
-import { auth, db, storage } from "../../../utils/firebase"
+import firebase, { auth, db, storage } from "../../../utils/firebase"
 
 const { Dragger } = Upload
 
-export default function UploadAvatar() {
+export default function UploadMemeModal() {
   const [isOpen, setIsOpen] = useState(false)
   const [file, setFile] = useState()
+  const [caption, setCaption] = useState("")
 
   const showModal = () => {
     setIsOpen(true)
@@ -30,17 +31,12 @@ export default function UploadAvatar() {
   }
 
   async function onSuccess(imageUrl) {
-    await auth.currentUser.updateProfile({
-      photoURL: imageUrl,
-    })
-
-    await db.collection("users").onSnapshot((snapshot) => {
-      const userRecord = snapshot.docs.find(
-        (doc) => doc.data().userId === auth?.currentUser?.uid
-      )
-      db.collection("users").doc(userRecord.id).update({
-        avatarUrl: imageUrl,
-      })
+    db.collection("memes").add({
+      caption,
+      imageUrl,
+      username: auth.currentUser.displayName,
+      userId: auth.currentUser.uid,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     })
   }
 
@@ -48,18 +44,19 @@ export default function UploadAvatar() {
     const imageName = `${file.name}_${uuid()}`
 
     storage
-      .ref(`avatars/${imageName}`)
+      .ref(`memes/${imageName}`)
       .put(file)
       .then((snapshot) => {
         if (snapshot.state === "success") {
           storage
-            .ref("avatars")
+            .ref("memes")
             .child(imageName)
             .getDownloadURL()
             .then(async (imageUrl) => {
               await onSuccess(imageUrl)
               setIsOpen(false)
               setFile()
+              setCaption("")
             })
         }
       })
@@ -68,13 +65,18 @@ export default function UploadAvatar() {
 
   return (
     <>
-      <Button onClick={showModal}>Upload Avatar</Button>
+      <Button onClick={showModal}>Upload Meme</Button>
       <Modal
-        title="Upload Avatar"
+        title="Upload Meme"
         open={isOpen}
         onOk={handleUpload}
         onCancel={closeModal}
       >
+        <Input
+          label="Caption"
+          placeholder="Meme caption"
+          onChange={(e) => setCaption(e.target.value)}
+        />
         <Dragger {...uploadProps}>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />

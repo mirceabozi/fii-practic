@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Input } from "antd"
 import AuthLayout from "../../components/layout/Auth"
-import { auth, authService } from "../../utils/firebase"
+import { auth } from "../../utils/firebase"
 import { useNavigate } from "react-router-dom"
 
 function Login() {
@@ -12,7 +12,7 @@ function Login() {
 
   const handleLogin = () => {
     auth
-      .signInWithEmailAndPassword(authService, email, password)
+      .signInWithEmailAndPassword(email, password)
       .then(() => {
         localStorage.setItem("isLoggedIn", "true")
         navigate("/")
