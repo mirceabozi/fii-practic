@@ -1,12 +1,16 @@
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import React from "react"
 import styled from "styled-components"
+
 const MemeCard = styled.div`
   height: 100%;
+  width: 450px;
   border-radius: 10px;
   background: white;
-  width: 450px;
   padding: 30px 20px;
   margin-bottom: 30px;
+  border: 1px solid lightgrey;
 `
 const Meme = styled.div`
   height: 480px;
@@ -18,55 +22,29 @@ const Meme = styled.div`
   margin: 10px 0;
 `
 const Details = styled.div`
-  font-size: 20px;
+  font-size: 18px;
 `
-const Comments = styled.div`
-  > div {
-    margin: 5px 0px 5px 20px;
-    display: flex;
-    font-size: 15px;
-    flex-flow: row wrap;
-  }
-`
-
-const Text = styled.div``
 
 const User = styled.div`
   font-weight: 600;
   margin-right: 10px;
+  color: grey;
+
+  span {
+    margin-left: 4px;
+  }
 `
 
-const comments = [
-  {
-    user: "User1",
-    comment: "Omg this meme is crazy",
-  },
-  {
-    user: "User2",
-    comment: "This meme be dank, bruh",
-  },
-  {
-    user: "User3",
-    comment: "Yeah that's right",
-  },
-]
-
-function renderComment({ user, comment }) {
-  return (
-    <div key={user}>
-      <User>{user}</User>
-      <Text>{comment}</Text>
-    </div>
-  )
-}
-
-export default function Card({ img, name }) {
+export default function Card({ img, name, username }) {
   return (
     <MemeCard>
+      <User>
+        <FontAwesomeIcon icon={faUserCircle} />
+        <span>{username}</span>
+      </User>
       <Meme img={img} />
       <hr />
-      <Details>{name}</Details>
-      <Comments>{comments.map(renderComment)}</Comments>
+      <Details>Caption: {name}</Details>
     </MemeCard>
   )
 }
