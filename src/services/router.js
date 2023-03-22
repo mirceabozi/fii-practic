@@ -4,6 +4,7 @@ import Login from "../pages/Login"
 import Register from "../pages/Register"
 import Profile from "../pages/Profile"
 import Find from "../pages/Find"
+import Matcher from "../pages/Matcher"
 import { createBrowserRouter } from "react-router-dom"
 import PrivateRoute from "../components/common/PrivateRoute"
 
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "find",
         element: <Find />,
+      },
+      {
+        path: "matcher",
+        element: <Matcher />,
       },
     ],
   },

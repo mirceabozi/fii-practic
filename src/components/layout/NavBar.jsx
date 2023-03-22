@@ -8,6 +8,7 @@ import {
   faMagnifyingGlass,
   faUser,
   faSignOut,
+  faFireFlameCurved,
 } from "@fortawesome/free-solid-svg-icons"
 import { Button } from "antd"
 import { auth } from "../../utils/firebase"
@@ -29,13 +30,22 @@ const Navigation = styled.ul`
   padding: 0;
   align-items: center;
 
-  li {
-    list-style-type: none;
-    margin: 0px 25px;
+  li,
+  a,
+  svg,
+  span {
     color: white;
   }
+
+  li {
+    list-style-type: none;
+    margin: 0px 20px;
+
+    :last-child {
+      margin: 0px;
+    }
+  }
   a {
-    color: white;
     text-decoration: none;
     :hover {
       color: #ffffffc4;
@@ -59,8 +69,13 @@ const menuItems = [
   },
   {
     icon: faUser,
-    title: "Profile",
+    title: "My Profile",
     path: "/profile",
+  },
+  {
+    icon: faFireFlameCurved,
+    title: "Match",
+    path: "/matcher",
   },
 ]
 
