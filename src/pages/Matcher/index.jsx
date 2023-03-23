@@ -4,14 +4,6 @@ import { auth, db } from "../../utils/firebase"
 import MatchList from "./components/MatchList"
 import UsersList from "./components/UsersList"
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  margin: 60px auto 0 auto;
-`
-
 const Dashboard = styled.div`
   display: flex;
   justify-content: space-between;
@@ -20,20 +12,37 @@ const Dashboard = styled.div`
 `
 
 export default function Matcher() {
-  const [matches, setMatches] = useState([])
-  const [users, setUsers] = useState([])
-  const [userMemes, setUserMemes] = useState([])
+  const [userListData, setUserListData] = useState({
+    users: [],
+    matches: [],
+    matchIds: [],
+    userMemes: [],
+    documentId: "",
+  })
 
   useEffect(() => {
     db.collection("users").onSnapshot((snapshot) => {
       const userDetails = snapshot.docs.find(
         (doc) => doc.data().userId === auth?.currentUser?.uid
       )
+      const allUsers = snapshot.docs.map((doc) => doc.data())
+      const matchIds = userDetails.data().matching
 
-      const potentialMatches = snapshot.docs.map((doc) => doc.data())
+      const potentialMatches = allUsers.filter(
+        (user) => !matchIds.includes(user.userId)
+      )
 
-      setUsers(potentialMatches)
-      setMatches(userDetails.data().matching)
+      const currentMatches = allUsers.filter((user) =>
+        matchIds.includes(user.userId)
+      )
+
+      setUserListData((prev) => ({
+        ...prev,
+        users: potentialMatches,
+        matches: currentMatches,
+        matchIds,
+        documentId: userDetails.id,
+      }))
     })
   }, [])
 
@@ -41,21 +50,19 @@ export default function Matcher() {
     db.collection("memes").onSnapshot((snapshot) => {
       const memes = snapshot.docs.map((doc) => doc.data())
 
-      const memesByProfile = users.reduce((acc, curr) => {
+      const memesByProfile = userListData.users.reduce((acc, curr) => {
         acc[curr.userId] = memes.filter((doc) => doc.userId === curr.userId)
         return acc
       }, {})
 
-      setUserMemes(memesByProfile)
+      setUserListData((prev) => ({ ...prev, userMemes: memesByProfile }))
     })
-  }, [users])
+  }, [userListData.users])
 
   return (
-    <Wrapper>
-      <Dashboard>
-        <MatchList matches={matches} />
-        <UsersList users={users} userMemes={userMemes} />
-      </Dashboard>
-    </Wrapper>
+    <Dashboard>
+      <MatchList userListData={userListData} />
+      <UsersList userListData={userListData} />
+    </Dashboard>
   )
 }

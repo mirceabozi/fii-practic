@@ -1,6 +1,9 @@
-import React from "react"
-import { Avatar } from "antd"
+import React, { useCallback } from "react"
+import { Avatar, Button } from "antd"
 import styled from "styled-components"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrash } from "@fortawesome/free-solid-svg-icons"
+import { db } from "../../../utils/firebase"
 
 const Wrap = styled.div`
   display: flex;
@@ -26,16 +29,38 @@ const NoMatches = styled.div`
   padding: 20px;
 `
 
-function renderMatch({ username, avatarUrl }) {
-  return (
-    <Wrap>
-      <Avatar src={avatarUrl} alt={username} />
-      <div>{username}</div>
-    </Wrap>
-  )
-}
+export default function MatchList({ userListData }) {
+  const { matches, matchIds, documentId } = userListData
 
-export default function MatchList({ matches }) {
+  const handleClick = useCallback(
+    (matchId) => {
+      const deleteMatch = async () => {
+        db.collection("users")
+          .doc(documentId)
+          .update({
+            matching: matchIds.filter((id) => id !== matchId),
+          })
+      }
+
+      deleteMatch()
+    },
+    [documentId, matchIds]
+  )
+
+  function renderMatch({ username, userId, avatarUrl }) {
+    return (
+      <Wrap>
+        <Avatar src={avatarUrl} alt={username} />
+        <div>{username}</div>
+        <Button
+          type="text"
+          icon={<FontAwesomeIcon icon={faTrash} />}
+          onClick={() => handleClick(userId)}
+        />
+      </Wrap>
+    )
+  }
+
   return (
     <List>
       <Title>Here are your matches</Title>

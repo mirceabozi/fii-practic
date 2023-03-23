@@ -19,7 +19,7 @@ const Layout = styled.div`
   justify-content: center;
   border-bottom: 1px solid white;
   height: 60px;
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
   background: linear-gradient(to left, #34e89e, #0f3443);
@@ -102,7 +102,7 @@ export default function NavBar() {
       <Navigation>
         {menuItems.map(renderMenuItem)}
         <li>
-          <Button type="text" onClick={() => signOut()}>
+          <Button type="text" onClick={signOut}>
             <FontAwesomeIcon icon={faSignOut} />
             Log out
           </Button>
