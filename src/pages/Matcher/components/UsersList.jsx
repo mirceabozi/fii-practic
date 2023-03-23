@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useContext } from "react"
 import styled from "styled-components"
+import { MatcherContext } from "../../../services/matcherContext"
 import UserCard from "./UserCard"
 
 const Users = styled.div`
@@ -16,27 +17,22 @@ const Users = styled.div`
 
 const Wrap = styled.div`
   display: flex;
+  justify-content: center;
   gap: 20px;
+  width: 100%;
 `
 
-export default function UsersList({ userListData }) {
-  const { users, userMemes, documentId, matchIds } = userListData
+export default function UsersList() {
+  const { potentialMatches } = useContext(MatcherContext)
 
-  function renderUserCard(card) {
-    return (
-      <UserCard
-        {...card}
-        documentId={documentId}
-        userMemes={userMemes}
-        matchIds={matchIds}
-      />
-    )
+  function renderUserCard(card, index) {
+    return <UserCard key={`userCard${index}`} {...card} />
   }
 
   return (
     <Users>
       <h2>Find your Meme Match</h2>
-      <Wrap>{users.map(renderUserCard)}</Wrap>
+      <Wrap>{potentialMatches.map(renderUserCard)}</Wrap>
     </Users>
   )
 }

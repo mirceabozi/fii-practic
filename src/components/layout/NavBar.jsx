@@ -90,7 +90,7 @@ export default function NavBar() {
 
   const renderMenuItem = (item) => {
     return (
-      <li>
+      <li key={item.title}>
         <FontAwesomeIcon icon={item.icon} />
         <Link to={item.path}>{item.title}</Link>
       </li>
@@ -101,7 +101,8 @@ export default function NavBar() {
     <Layout>
       <Navigation>
         {menuItems.map(renderMenuItem)}
-        <li>
+
+        <li key="signOut">
           <Button type="text" onClick={signOut}>
             <FontAwesomeIcon icon={faSignOut} />
             Log out
