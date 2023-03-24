@@ -8,6 +8,7 @@ import {
   faMagnifyingGlass,
   faUser,
   faSignOut,
+  faFireFlameCurved,
 } from "@fortawesome/free-solid-svg-icons"
 import { Button } from "antd"
 import { auth } from "../../utils/firebase"
@@ -18,7 +19,7 @@ const Layout = styled.div`
   justify-content: center;
   border-bottom: 1px solid white;
   height: 60px;
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
   background: linear-gradient(to left, #34e89e, #0f3443);
@@ -29,13 +30,22 @@ const Navigation = styled.ul`
   padding: 0;
   align-items: center;
 
-  li {
-    list-style-type: none;
-    margin: 0px 25px;
+  li,
+  a,
+  svg,
+  span {
     color: white;
   }
+
+  li {
+    list-style-type: none;
+    margin: 0px 20px;
+
+    :last-child {
+      margin: 0px;
+    }
+  }
   a {
-    color: white;
     text-decoration: none;
     :hover {
       color: #ffffffc4;
@@ -59,8 +69,13 @@ const menuItems = [
   },
   {
     icon: faUser,
-    title: "Profile",
+    title: "My Profile",
     path: "/profile",
+  },
+  {
+    icon: faFireFlameCurved,
+    title: "Match",
+    path: "/matcher",
   },
 ]
 
@@ -75,7 +90,7 @@ export default function NavBar() {
 
   const renderMenuItem = (item) => {
     return (
-      <li>
+      <li key={item.title}>
         <FontAwesomeIcon icon={item.icon} />
         <Link to={item.path}>{item.title}</Link>
       </li>
@@ -86,8 +101,9 @@ export default function NavBar() {
     <Layout>
       <Navigation>
         {menuItems.map(renderMenuItem)}
-        <li>
-          <Button type="text" onClick={() => signOut()}>
+
+        <li key="signOut">
+          <Button type="text" onClick={signOut}>
             <FontAwesomeIcon icon={faSignOut} />
             Log out
           </Button>

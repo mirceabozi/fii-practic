@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import Card from "../../components/cards/Meme"
 import { db } from "../../utils/firebase"
+import { Spin } from "antd"
 
 const HomeWrap = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  padding-top: 60px;
 `
 
 function renderMemes(meme) {
@@ -38,7 +40,11 @@ function Home() {
       })
   }, [])
 
-  return <HomeWrap>{memes.length && memes.map(renderMemes)}</HomeWrap>
+  return (
+    <HomeWrap>
+      {memes.length === 0 ? <Spin /> : memes.map(renderMemes)}
+    </HomeWrap>
+  )
 }
 
 export default Home

@@ -6,11 +6,7 @@ import isLoggedIn from "../../utils/auth"
 import styled from "styled-components"
 
 const Background = styled.div`
-  > div:nth-child(2) {
-    margin-top: 60px;
-    padding-top: 60px;
-    min-height: 100vh;
-  }
+  min-height: 100vh;
 `
 
 const PrivateRoute = () => {

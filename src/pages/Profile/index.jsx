@@ -7,17 +7,14 @@ import UploadMemeModal from "./components/UploadMemeModal"
 
 import { auth, db } from "../../utils/firebase"
 
-const Wrap = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
 const Content = styled.div`
   max-width: 880px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 const UserDetails = styled.div`
@@ -119,29 +116,27 @@ export default function Profile() {
   }
 
   return (
-    <Wrap>
-      <Content>
-        <UserDetails>
-          <Image src={userDetails?.avatarUrl} alt={userDetails?.username} />
-          <Name>{userDetails?.username}</Name>
-          <Description>{userDetails?.description || "-"}</Description>
-          <ActionsWrap>
-            <UploadAvatar />
-            <UploadMemeModal />
-            <UpdateDescriptionModal
-              currentDescription={userDetails?.description}
-              documentId={userDetails?.documentId}
-            />
-          </ActionsWrap>
-        </UserDetails>
-        <CardsWrapper>
-          {profileMemes.length === 0 ? (
-            <span>You have no memes added yet </span>
-          ) : (
-            profileMemes.map(renderMemes)
-          )}
-        </CardsWrapper>
-      </Content>
-    </Wrap>
+    <Content>
+      <UserDetails>
+        <Image src={userDetails?.avatarUrl} alt={userDetails?.username} />
+        <Name>{userDetails?.username}</Name>
+        <Description>{userDetails?.description || "-"}</Description>
+        <ActionsWrap>
+          <UploadAvatar />
+          <UploadMemeModal />
+          <UpdateDescriptionModal
+            currentDescription={userDetails?.description}
+            documentId={userDetails?.documentId}
+          />
+        </ActionsWrap>
+      </UserDetails>
+      <CardsWrapper>
+        {profileMemes.length === 0 ? (
+          <span>You have no memes added yet </span>
+        ) : (
+          profileMemes.map(renderMemes)
+        )}
+      </CardsWrapper>
+    </Content>
   )
 }
