@@ -1,6 +1,5 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, Input, Modal } from "antd"
-import { useState } from "react"
 import { db } from "../../../utils/firebase"
 
 export default function UpdateDescriptionModal({
